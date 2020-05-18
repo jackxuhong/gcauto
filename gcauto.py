@@ -15,7 +15,7 @@ app = flask.Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", default=False)
 app.config['SESSION_TYPE'] = 'filesystem'
 
-app.register_blueprint(google_auth.app)
+app.register_blueprint(google_auth.google_auth)
 
 
 def gc_service():
