@@ -12,7 +12,7 @@ from googleapiclient.discovery import build
 import google_auth
 
 app = flask.Flask(__name__)
-app.secret_key = os.environ.get("SECRET_KEY", default=False)
+app.secret_key = os.environ.get("SECRET_KEY", default=os.urandom(24))
 app.config['SESSION_TYPE'] = 'filesystem'
 
 app.register_blueprint(google_auth.google_auth)
