@@ -4,6 +4,8 @@ import os
 from datetime import datetime
 
 import flask
+#from flask_sqlalchemy import SQLAlchemy
+
 import google.oauth2.credentials
 import googleapiclient.discovery
 from authlib.integrations.requests_client import OAuth2Session
@@ -11,11 +13,15 @@ from googleapiclient.discovery import build
 
 import google_auth
 
+from models import db
+
 app = flask.Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", default=os.urandom(24))
 app.config['SESSION_TYPE'] = 'filesystem'
 
 app.register_blueprint(google_auth.google_auth)
+
+db.init_app(app)
 
 
 def gc_service():
