@@ -13,11 +13,13 @@ from googleapiclient.discovery import build
 
 import google_auth
 
-from models import db
+from models import db, User, ManagedCourse
 
 app = flask.Flask(__name__)
-app.secret_key = os.environ.get("SECRET_KEY", default=os.urandom(24))
+app.secret_key = os.environ.get('SECRET_KEY', default=os.urandom(24))
 app.config['SESSION_TYPE'] = 'filesystem'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
+    'SQLALCHEMY_DATABASE_URI')
 
 app.register_blueprint(google_auth.google_auth)
 
@@ -47,6 +49,14 @@ def test_task1(courseId):
 def index():
     if google_auth.is_logged_in():
         user_info = google_auth.get_user_info()
+        print(user_info)
+
+        user = User.query.filter_by(id=user_info['id']).first()
+        if not user:
+            user = User(id=user_info['id'], email=user_info['email'], name=user_info['name'],
+                        given_name=user_info['given_name'], family_name=user_info['family_name'], picture=user_info['picture'])
+            db.session.add(user)
+            db.session.commit()
 
         #credentials = google_auth.build_credentials()
         #service = build('classroom', 'v1', credentials=credentials)
