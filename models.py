@@ -21,3 +21,10 @@ class ManagedCourse(db.Model):
 
     def __repr__(self):
         return f'<ManagedCourse {self.courseId} of user {self.userId}'
+
+
+class RecurringCoursework(db.Model):
+    courseId: db.Column(db.String(64))
+
+    def __repr__(self):
+        return f'<RecurringCoursework {self.courseId}'
